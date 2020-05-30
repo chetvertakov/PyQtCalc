@@ -12,8 +12,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #объявляем свойсва элементов формы (можно сделать и в QT Designer)
         self.lineEdit.setAlignment(QtCore.Qt.AlignRight)
 
-        #объявляем рабочие переменные для вычислений
-        self.OpenBrackets = 0
+        #объявляем рабочие переменные для вычислен
         self.calctext = ""
         self.SUMM = 0
         self.DOT = 0
