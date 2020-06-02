@@ -1,13 +1,25 @@
-import sys
+import sys, os
 from PyQt5 import uic, QtCore, QtGui, QtWidgets
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
 
+        path = resource_path("res\Main.ui")
+        #print("THIS IS IT:   "+path)
         # Загружаем интерфейс из ui файла
-        uic.loadUi('Main.ui', self)
+        uic.loadUi(path, self)
 
         #объявляем свойсва элементов формы (можно сделать и в QT Designer)
         self.lineEdit.setAlignment(QtCore.Qt.AlignRight)
@@ -18,6 +30,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.DOT = 0
         self.NumLen = 0
         self.IsCalculated = False
+        self.OpenBrackets = 0
 
         #загружаем обработчики кликов
         self.Btn1.clicked.connect(self.clickValue)
@@ -83,13 +96,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def clickValue(self):
 
+        #если сейчас отображается результат вычисления то при новом вводе поле очищается
         if (self.IsCalculated):
             self.clear()
 
         btntext = self.sender().text()
 
         #проверяем введенный символ если он первый
-        if ((len(self.calctext)==0) &
+        if ((len(self.calctext)==0) and
                     ("0123456789(".find(btntext)!=-1)):
             self.lineEdit.insert(btntext)
             self.NumLen += 1
@@ -157,9 +171,8 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 pass
 
-        print(self.NumLen)
+        #print(self.NumLen)
         self.calctext = self.lineEdit.text()
-
 
 
 if __name__ == '__main__':
