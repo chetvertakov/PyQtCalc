@@ -1,4 +1,5 @@
 import sys, os
+import CalculateString
 from PyQt5 import uic, QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 
@@ -47,6 +48,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.BtnDot.clicked.connect(self.clickValue)
         self.BtnMulti.clicked.connect(self.clickValue)
         self.BtnSplit.clicked.connect(self.clickValue)
+        self.BtnPow.clicked.connect(self.clickValue)
         self.BtnEqual.clicked.connect(self.clickValue)
 
         self.BtnClear.clicked.connect(self.clear)
@@ -87,7 +89,7 @@ class MainWindow(QtWidgets.QMainWindow):
             elif (")".find(self.calctext[-1]) != -1):
                 self.calctext = self.calctext[:-1]
                 self.OpenBrackets += 1
-            elif ("+-*/".find(self.calctext[-1]) != -1):
+            elif ("+-*/^".find(self.calctext[-1]) != -1):
                 self.calctext = self.calctext[:-1]
 
             self.lineEdit.setText(self.calctext)
@@ -162,14 +164,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
             elif (("(".find(btntext)!=-1) &
-                        ("+-*/(".find(prev)!=-1)):
+                        ("+-*/^(".find(prev)!=-1)):
                 self.calctext += btntext
                 self.OpenBrackets+=1
                 self.NumLen = 0
 
 
 
-            elif (("+-*/".find(btntext)!=-1) &
+            elif (("+-*/^".find(btntext)!=-1) &
                         ("0123456789)".find(prev)!=-1)):
                 self.calctext += btntext
                 self.DOT = 0
@@ -198,7 +200,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         ("0123456789)".find(prev)!=-1) &
                         (self.OpenBrackets==0)):
                 try:
-                    self.SUMM = eval(self.calctext)
+                    self.SUMM = CalculateString.CalculateString(self.calctext)
                 except Exception as e:
                     self.SUMM = e
 
